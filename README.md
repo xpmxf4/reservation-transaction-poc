@@ -127,7 +127,7 @@ chmod +x init-aws.sh
 ```
 3. **LocalStack 리소스 생성 스크립트 실행**
 ```sh
-./sh init-aws.sh
+./init-aws.sh
 ```
 > 위 3단계를 거치면 개발에 필요한 모든 인프라가 준비됩니다.
 4. **컨테이너 중지**
