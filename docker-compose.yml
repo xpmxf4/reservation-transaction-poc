@@ -1,0 +1,23 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: transaction-db-mysql
+    restart: always
+    ports:
+      # application.yml에 설정한 포트와 맞춥니다. (Host:Container)
+      - "13306:3306"
+    environment:
+      # application.yml에 설정한 username/password와 맞춥니다.
+      MYSQL_ROOT_PASSWORD: password
+      # application.yml의 DB 이름과 맞춥니다. 컨테이너 시작 시 DB가 자동 생성됩니다.
+      MYSQL_DATABASE: transaction_db
+    volumes:
+      # 데이터를 영속적으로 보관하기 위해 볼륨을 사용합니다.
+      - db-data:/var/lib/mysql
+    command:
+      # 한글 깨짐 방지를 위해 UTF-8 설정을 추가합니다.
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  db-data:
