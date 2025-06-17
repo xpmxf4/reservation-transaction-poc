@@ -35,7 +35,7 @@
 1.  **DB 컨테이너 실행**
 
     ```sh
-    docker-compose up -d
+    docker compose up -d
     ```
 
     * 위 명령어 한 줄이면 개발에 필요한 MySQL DB가 자동으로 준비됩니다.
@@ -43,7 +43,7 @@
 2.  **DB 컨테이너 중지**
 
     ```sh
-    docker-compose down
+    docker compose down
     ```
     * `-v` 옵션을 함께 사용하면 데이터 볼륨까지 삭제합니다: `docker-compose down -v`
 
@@ -97,5 +97,5 @@
 
 ```sh
 # 개발 환경 실행 (매번)
-docker-compose up -d
+docker compose up -d
 ```
