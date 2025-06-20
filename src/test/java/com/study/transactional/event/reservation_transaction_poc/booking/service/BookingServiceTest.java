@@ -25,7 +25,7 @@ class BookingServiceTest {
     private UmsService umsService;
 
     @Test
-    void 알림톡_전송에_실패하면_예약정보가_롤백_되어야한다() {
+    void 알림톡_전송에_실패하면_예약정보가_롤백_된다() {
         // given - umsService 는 항상 예외를 던짐
         doThrow(new RuntimeException())
             .when(umsService)
