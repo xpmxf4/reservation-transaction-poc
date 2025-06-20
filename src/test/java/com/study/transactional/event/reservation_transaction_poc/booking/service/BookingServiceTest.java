@@ -1,14 +1,13 @@
 package com.study.transactional.event.reservation_transaction_poc.booking.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doThrow;
 
 import com.study.transactional.event.reservation_transaction_poc.booking.repository.ReservationRepository;
 import com.study.transactional.event.reservation_transaction_poc.ums.service.UmsService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
