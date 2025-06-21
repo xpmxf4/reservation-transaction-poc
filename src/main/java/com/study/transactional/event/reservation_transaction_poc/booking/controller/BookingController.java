@@ -14,8 +14,8 @@ public class BookingController {
 
     private final BookingPropagationService bookingPropagationService;
 
-    @GetMapping("/booking/test")
-    public String bookingTest(@RequestParam String userNo, @RequestParam String productId) {
+    @GetMapping("/propagation/test")
+    public String bookingPropagationTest(@RequestParam String userNo, @RequestParam String productId) {
         bookingPropagationService.createReservationWithUmsRequiresNewTakesLongTime(Long.valueOf(userNo), productId, new ArrayList<>());
 
         return "Booking test completed successfully.";
