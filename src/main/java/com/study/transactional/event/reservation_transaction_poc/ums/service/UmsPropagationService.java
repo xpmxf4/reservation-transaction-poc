@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class UmsPropagationService {
@@ -31,4 +33,37 @@ public class UmsPropagationService {
         throw new RuntimeException("[NESTED] 알림톡 전송에서 의도된 API 호출 실패");
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void sendAlimtalkWithRequiresNewTakesLongTimeThrowsException(String phoneNo, TemplateCode templateCode, String key, List<String> threadNames) {
+        String currentThreadName = Thread.currentThread().getName();
+        threadNames.add(currentThreadName);
+        log.info("[UMS Service] 실행 스레드 : {}", currentThreadName);
+        log.info("[UMS Service] 알림톡 전송 (오래 걸리는 작업) ...");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        log.info(">> [UMS Service] 2초 후 API 응답 완료. ");
+
+        throw new RuntimeException("[REQUIRES_NEW_SLEEP] 알림톡 전송에서 의도된 API 호출 실패");
+    }
+
+    @Transactional(propagation = Propagation.NESTED)
+    public void sendAlimtalkWithNestedTakesLongTime(String phoneNo, TemplateCode templateCode, String key, List<String> threadNames) {
+        String currentThreadName = Thread.currentThread().getName();
+        threadNames.add(currentThreadName);
+        log.info("[UMS Service] 실행 스레드 : {}", currentThreadName);
+        log.info("[UMS Service] 알림톡 전송 (오래 걸리는 작업) ...");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        log.info(">> [UMS Service] 2초 후 API 응답 완료. ");
+
+        throw new RuntimeException("[NESTED_SLEEP] 알림톡 전송에서 의도된 API 호출 실패");
+    }
 }
