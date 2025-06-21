@@ -30,7 +30,7 @@ public class BookingPropagationService {
 
         // 3. 알림톡 전송(REQUIRES)
         try {
-            umsService.sendAlimtalkWithRequired(userPhone, RESERVATED, String.valueOf(savedReservation.getId()));
+            umsService.sendAlimtalkWithRequiredThrowsException(userPhone, RESERVATED, String.valueOf(savedReservation.getId()));
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -47,7 +47,7 @@ public class BookingPropagationService {
 
         // 3. 알림톡 전송(REQUIRES_NEW)
         try {
-            umsService.sendAlimtalkWithRequiresNew(userPhone, RESERVATED, String.valueOf(savedReservation.getId()));
+            umsService.sendAlimtalkWithRequiresNewThrowsException(userPhone, RESERVATED, String.valueOf(savedReservation.getId()));
         } catch (Exception e) {
             log.error(e.getMessage());
         }
@@ -64,7 +64,7 @@ public class BookingPropagationService {
 
         // 3. 알림톡 전송(REQUIRES_NEW)
         try {
-            umsService.sendAlimtalkWithNested(userPhone, RESERVATED, String.valueOf(savedReservation.getId()));
+            umsService.sendAlimtalkWithNestedThrowsException(userPhone, RESERVATED, String.valueOf(savedReservation.getId()));
         } catch (Exception e) {
             log.error(e.getMessage());
         }
