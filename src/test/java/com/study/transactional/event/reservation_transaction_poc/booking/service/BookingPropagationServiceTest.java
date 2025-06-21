@@ -37,7 +37,7 @@ class BookingPropagationServiceTest {
         // then
         // 최종적으로 예약 정보는 롤백되어야 한다.
         long numOfCreatedReservation = reservationRepository.count();
-        assertThat(numOfCreatedReservation).isEqualTo(0);
+        assertThat(numOfCreatedReservation).isZero();
     }
 
 
