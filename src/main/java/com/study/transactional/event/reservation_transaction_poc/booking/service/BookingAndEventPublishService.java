@@ -1,8 +1,8 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.service.transactionalEventListener;
+package com.study.transactional.event.reservation_transaction_poc.booking.service;
 
 import com.study.transactional.event.reservation_transaction_poc.booking.entity.Reservation;
 import com.study.transactional.event.reservation_transaction_poc.booking.repository.ReservationRepository;
-import com.study.transactional.event.reservation_transaction_poc.booking.service.transactionalEventListener.event.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.booking.service.event.ReservationCreatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;

@@ -1,14 +1,13 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.service.transactionalEventListener;
+package com.study.transactional.event.reservation_transaction_poc.ums.service;
 
-import com.study.transactional.event.reservation_transaction_poc.booking.service.transactionalEventListener.event.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.booking.service.event.ReservationCreatedEvent;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 @Slf4j
 @Service
-public class BookingTransactionalEventListener {
+public class BookingEventListener {
 
     // event 발행 및, tx=AFTER_COMMIT 후 처리
     @TransactionalEventListener

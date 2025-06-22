@@ -1,7 +1,7 @@
 package com.study.transactional.event.reservation_transaction_poc.booking.controller;
 
 import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingPropagationService;
-import com.study.transactional.event.reservation_transaction_poc.booking.service.transactionalEventListener.BookingAndEventPublishService;
+import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingAndEventPublishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
