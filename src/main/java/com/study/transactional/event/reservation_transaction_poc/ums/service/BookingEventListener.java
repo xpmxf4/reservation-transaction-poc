@@ -5,12 +5,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.event.TransactionalEventListener;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
+
 
 @Slf4j
 @Service
 public class BookingEventListener {
 
     // event 발행 및, tx=AFTER_COMMIT 후 처리
+    @Retryable(
+        value = {RuntimeException.class},
+        maxAttempts = 3,
+        backoff = @Backoff(delay = 2000, multiplier = 1.5)
+    )
     @TransactionalEventListener
     public void handleReservationCreatedEvent(ReservationCreatedEvent event) {
         try {
