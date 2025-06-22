@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.study.transactional.event.reservation_transaction_poc.booking.entity.Reservation;
 import com.study.transactional.event.reservation_transaction_poc.booking.enums.BookingStatus;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,11 @@ class ReservationRepositoryTest {
     @Autowired
     ReservationRepositoryTest(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
+    }
+
+    @AfterEach
+    void tearDown() {
+        reservationRepository.deleteAll();
     }
 
     @Test

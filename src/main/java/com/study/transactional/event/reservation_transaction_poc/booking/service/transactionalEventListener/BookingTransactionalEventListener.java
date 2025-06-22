@@ -1,0 +1,26 @@
+package com.study.transactional.event.reservation_transaction_poc.booking.service.transactionalEventListener;
+
+import com.study.transactional.event.reservation_transaction_poc.booking.service.transactionalEventListener.event.ReservationCreatedEvent;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.event.TransactionalEventListener;
+
+@Slf4j
+@Service
+public class BookingTransactionalEventListener {
+
+    // event 발행 및, tx=AFTER_COMMIT 후 처리
+    @TransactionalEventListener
+    public void handleReservationCreatedEvent(ReservationCreatedEvent event) {
+        log.info("[TRANSACTIONAL EVENT LISTENER] Handling ReservationCreatedEvent: id={}, userPhone={}, productId={}",
+                event.id(), event.userPhone(), event.productId());
+    }
+
+    // event 발행 되고 바로 처리
+//    @EventListener
+//    public void handleReservationCreatedEventWithoutTransaction(ReservationCreatedEvent event) {
+//        log.info("[EVENT LISTENER] Handling ReservationCreatedEvent: id={}, userPhone={}, productId={}",
+//                event.id(), event.userPhone(), event.productId());
+//    }
+}
