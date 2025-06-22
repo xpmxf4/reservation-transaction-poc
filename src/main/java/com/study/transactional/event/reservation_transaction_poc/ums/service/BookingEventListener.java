@@ -13,16 +13,22 @@ public class BookingEventListener {
     // event 발행 및, tx=AFTER_COMMIT 후 처리
     @TransactionalEventListener
     public void handleReservationCreatedEvent(ReservationCreatedEvent event) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         log.info("[TRANSACTIONAL EVENT LISTENER] Handling ReservationCreatedEvent: id={}, userPhone={}, productId={}",
                 event.id(), event.userPhone(), event.productId());
     }
 
     @TransactionalEventListener
     public void handleReservationCreatedEventWithException(ReservationCreatedEvent event) {
-        log.info("[TRANSACTIONAL EVENT LISTENER WITH EXCEPTION] Handling ReservationCreatedEvent: id={}, userPhone={}, productId={}",
-                event.id(), event.userPhone(), event.productId());
+//        log.info("[TRANSACTIONAL EVENT LISTENER WITH EXCEPTION] Handling ReservationCreatedEvent: id={}, userPhone={}, productId={}",
+//                event.id(), event.userPhone(), event.productId());
 
-        throw new RuntimeException("Simulated exception to trigger rollback");
+//        throw new RuntimeException("Simulated exception to trigger rollback");
     }
 
     // event 발행 되고 바로 처리
