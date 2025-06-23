@@ -55,7 +55,7 @@ public class BookingEventListener {
     public void handleReservationCreatedEventWithException(ReservationCreatedEvent event) {
         log.info("[TRANSACTIONAL EVENT LISTENER WITH EXCEPTION] Handling ReservationCreatedEvent: id={}, userPhone={}, productId={}",
                 event.id(), event.userPhone(), event.productId());
-//
+
         throw new RuntimeException("Simulated exception to trigger rollback");
     }
 
