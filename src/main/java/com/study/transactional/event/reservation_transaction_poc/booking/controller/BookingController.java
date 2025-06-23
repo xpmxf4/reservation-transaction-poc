@@ -1,20 +1,24 @@
 package com.study.transactional.event.reservation_transaction_poc.booking.controller;
 
+import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingOutboxService;
 import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingPropagationService;
 import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingAndEventPublishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
 @RestController
+@RequestMapping("/booking")
 @RequiredArgsConstructor
 public class BookingController {
 
     private final BookingPropagationService bookingPropagationService;
     private final BookingAndEventPublishService bookingAndEventPublishService;
+    private final BookingOutboxService bookingOutboxService;
 
     @GetMapping("/propagation/test")
     public String bookingPropagationTest(@RequestParam String userNo, @RequestParam String productId) {
@@ -28,5 +32,12 @@ public class BookingController {
         bookingAndEventPublishService.createReservationAndPublishReservationEvent(Long.valueOf(userNo), productId);
 
         return "Booking event listener test completed successfully.";
+    }
+
+    @GetMapping("/outbox")
+    public String bookingOutboxTest(@RequestParam String userNo, @RequestParam String productId) {
+        bookingOutboxService.createBookingOutbox(Long.valueOf(userNo), productId);
+
+        return "Booking outbox test completed successfully.";
     }
 }

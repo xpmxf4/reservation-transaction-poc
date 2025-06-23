@@ -13,6 +13,16 @@ import java.util.List;
 public class UmsPropagationService {
 
     @Transactional(propagation = Propagation.REQUIRED) // 기본
+    public void sendAlimtalk(String phoneNo, TemplateCode templateCode, String key) {
+        log.info("[REQUIRED] 알림톡 전송 ...");
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED) // 기본
     public void sendAlimtalkWithRequiredThrowsException(String phoneNo, TemplateCode templateCode, String key) {
         log.info("[REQUIRED] 알림톡 전송 ...");
 
