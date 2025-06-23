@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface OutboxRepository extends JpaRepository<Outbox, Long> {
 
-    List<Outbox> findByStatusOrderByCreatedAtAsc(OutboxStatus status);
+    List<Outbox> findTop10ByStatusOrderByCreatedAtAsc(OutboxStatus status);
 }

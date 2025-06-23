@@ -23,7 +23,7 @@ public class OutboxPollingScheduler {
     @Transactional
     @Scheduled(fixedDelay = 5000)
     public void pollAndProcessOutboxEvents() {
-        List<Outbox> pendingEvents = outboxRepository.findByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
+        List<Outbox> pendingEvents = outboxRepository.findTop10ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
 
         if (pendingEvents.isEmpty()) {
             return;

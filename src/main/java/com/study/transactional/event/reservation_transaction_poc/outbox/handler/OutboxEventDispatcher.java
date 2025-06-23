@@ -22,7 +22,12 @@ public class OutboxEventDispatcher {
         try {
             log.info("Dispatching outbox event: {}", outbox);
 
-            handlers.stream().filter(handler -> handler.supports(outbox.getEvertType())).findFirst().orElseThrow(() -> new IllegalArgumentException("No handler found for event type: " + outbox.getEvertType())).handle(outbox.getPayload());
+            handlers.stream()
+                    .filter(handler -> handler.supports(outbox.getEvertType()))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("No handler found for event type: " + outbox.getEvertType()))
+                    .handle(outbox.getPayload());
+
         } catch (Exception e) {
             log.error("Failed to process outbox event: {}", outbox.getId(), e);
             outbox.incrementRetryCount();
