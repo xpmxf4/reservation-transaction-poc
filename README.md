@@ -1,112 +1,41 @@
-# Reservation Transaction PoC - 로컬 개발환경 빠른 시작 가이드
-
-## 🖥️ 1. 개요
-
-* 이 문서는 **Reservation Transaction PoC** 프로젝트의 로컬 개발환경(`MySQL`)을 구성하기 위한 실전 자동화 가이드입니다.
-* Docker와 docker-compose만 있으면, **명령어 한 줄로 DB 환경 세팅**이 완료됩니다.
-
+# Reservation Transaction PoC
+분산 시스템의 트랜잭션 분리 및 데이터 정합성 보장 아키텍처 PoC.
+## 🚀 프로젝트 목표
+#### **🎯 Goal 1: 트랜잭션 분리 및 신뢰성 있는 이벤트 발행**
+핵심 로직과 부가 로직의 트랜잭션을 분리하여 시스템 안정성 확보.
+* **탐색 완료:** `@Transactional` 전파 옵션, `@TransactionalEventListener` 등 대안 탐색 및 한계점(스레드 블로킹, 이벤트 유실) 식별 완료.
+* **핵심 패턴:** 트랜잭셔널 아웃박스 패턴(TOP) 도입. 메인 DB 작업과 이벤트 발행의 원자성 보장.
+* **구현:**
+* **1단계:** Polling Publisher MVP 구축.
+* **2단계:** Log-based CDC(Debezium) 도입 검토.
+#### **🎯 Goal 2: EDA 확장성 및 데이터 파이프라인 고도화**
+다양한 시스템에서 이벤트를 안정적으로 소비할 수 있는 확장 가능한 아키텍처 구축.
+* **실시간 처리:** Polling에서 Log-based CDC(Debezium)로 전환. DB 부하 최소화 및 지연 시간 단축.
+* **순서 보장:** Kinesis/Kafka 도입. Partition Key 기반 이벤트 순서 보장 및 데이터 무결성 확보.
+* **느슨한 결합:** 도메인 이벤트를 통한 서비스 간 결합도 최소화 및 유연한 서비스 확장 구조 지향.
 -----
-
-## ⚙️ 2. 환경 구조/서비스 요약
-
-| 서비스 | 이미지 | 호스트 포트 | 컨테이너 포트 | 계정/비번/DB | 비고 |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| **MySQL** | `mysql:8.0` | `13306` | `3306` | `root` / `password` / `transaction_db` | `utf8mb4`, KST |
-
------
-
-## 🏗️ 3. 프로젝트 구조
-
-```
-/reservation-transaction-poc
- ├── docker-compose.yml
- └── ... (나머지 Spring Boot 프로젝트 파일)
-```
-
-* **docker-compose.yml**:
-  `MySQL` 데이터베이스 컨테이너의 모든 설정(버전, 포트, 계정, 초기 DB 등)을 정의하고 실행합니다.
-
------
-
-## 🚀 4. 사용법 (완전 자동화)
-
-1.  **DB 컨테이너 실행**
-
-    ```sh
-    docker compose up -d
-    ```
-
-    * 위 명령어 한 줄이면 개발에 필요한 MySQL DB가 자동으로 준비됩니다.
-
-2.  **DB 컨테이너 중지**
-
-    ```sh
-    docker compose down
-    ```
-
-    * `-v` 옵션을 함께 사용하면 데이터 볼륨까지 삭제합니다: `docker-compose down -v`
-
------
-
-## 🧑‍💻 5. 상태 확인 및 접속
-
-* **실행중인 컨테이너 목록 확인:**
-
-  ```sh
-  docker ps
-  ```
-
-* **MySQL 컨테이너 로그 확인:**
-
-  ```sh
-  docker logs transaction-db-mysql
-  ```
-
-* **MySQL 컨테이너 내부 접속:**
-
-  ```sh
-  docker exec -it transaction-db-mysql bash
-  ```
-
-* **로컬에서 MySQL 클라이언트로 직접 접속:**
-
-  ```sh
-  mysql -h 127.0.0.1 -P 13306 -u root -p
-  # 암호 입력: password
-  ```
-
------
-
-## ⚡ 6. 문제해결 체크리스트
-
-* **포트 충돌 에러 발생 시:**
-  `docker ps` 명령어로 `13306` 포트를 이미 사용중인 다른 컨테이너가 있는지 확인하고, 필요시 해당 컨테이너를 중지 (`docker stop [컨테이너명]`) 또는 `docker-compose.yml`의 포트를 변경하세요.
-
-* **DB 연결이 안 될 경우:**
-  `application.yml`의 `datasource` 정보(url, username, password)가 위 `2. 환경 구조` 표의 내용과 일치하는지 다시 한번 확인하세요.
-
-* **MySQL 컨테이너가 정상인지 확인:**
-  위 `5. 상태 확인 및 접속`의 로그 확인 및 직접 접속 명령어를 통해 DB 서버의 상태를 직접 체크하세요.
-
------
-
-## 📝 7. 환경 업데이트
-
-* DB 버전 변경, 포트 수정, 비밀번호 변경 등 환경에 대한 모든 수정은 **`docker-compose.yml` 파일 하나만 관리**하면 됩니다.
-
------
-
-## 🤔 8. 추후 해볼 것들
-
-* **`@Testcontainers` 도입 검토**
-    * **이유**: 현재는 테스트 코드를 실행하기 위해 `docker compose up` 명령어로 DB 컨테이너를 미리 실행해야 하는 번거로움이 있습니다.
-    * **개선 아이디어**: `@Testcontainers` 라이브러리를 도입하면, 테스트 라이프사이클에 맞춰 자동으로 DB 컨테이너를 실행하고 테스트 종료 후 제거해주는 환경을 구축할 수 있습니다. 이를 통해 각 테스트가 격리된 DB 환경을 사용하게 되어 테스트의 독립성과 안정성을 크게 향상시킬 수 있습니다.
-
------
-
-### ✅ 이 프로젝트의 개발 환경 준비는 아래 명령어가 전부입니다.
-
+## ⚙ 로컬 개발 환경 실행
+Docker Compose를 통해 개발 인프라 관리.
 ```sh
-# 개발 환경 실행 (매번)
+# 모든 서비스 실행 (백그라운드)
 docker compose up -d
 ```
+-----
+## 📚 참고 자료
+프로젝트 아키텍처 설계 시 참고한 국내외 기술 자료.
+#### **해외 사례**
+* **[How Disney+ scales globally on Amazon DynamoDB](https://www.google.com/search?q=https://aws.amazon.com/blogs/database/how-disney-scales-globally-on-amazon-dynamodb/)**
+> DynamoDB 글로벌 테이블을 활용한 대규모 확장성 및 저지연 아키텍처.
+* **[Amazon DynamoDB Customers - Zoom](https://aws.amazon.com/dynamodb/customers/)**
+> DynamoDB 온디맨드 모드를 통한 트래픽 급증 대응 사례.
+* **[How Airbnb simplified its data infrastructure by moving to Amazon DynamoDB](https://www.google.com/search?q=https://www.youtube.com/watch%3Fv%3Djw_h_h5Lp6A)**
+> DynamoDB 도입을 통한 데이터 인프라 단순화 및 생산성 향상 경험.
+#### **국내 사례**
+* **[배달의민족 최전방 시스템\! '가게노출 시스템'을 소개합니다.](https://techblog.woowahan.com/2667/)**
+> DynamoDB의 주 저장소/캐시 활용 및 실제 운영 경험.
+* **[[배민스토어] 배민스토어에 이벤트 기반 아키텍처를 곁들인…](https://techblog.woowahan.com/13101/)**
+> Kafka, DynamoDB, Redis 조합의 이벤트 기반 아키텍처 사례.
+* **[당근마켓, AWS 기반 온라인 플랫폼을 통한 지역 커뮤니티 서비스 사례](https://aws.amazon.com/ko/blogs/korea/danggeun-market-online-platform-community-building/)**
+> AWS 관리형 서비스를 활용한 대규모 서비스 구축 및 운영 철학.
+* **[삼성 클라우드의 Amazon DynamoDB 비용 최적화 여정](https://aws.amazon.com/ko/blogs/tech/sec-cloud-amazon-dynamodb-cost-optimization-journey/)**
+> DynamoDB TTL 기능을 활용한 대용량 임시 데이터 처리 및 비용 최적화.
