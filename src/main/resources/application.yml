@@ -10,3 +10,12 @@ spring:
       hibernate:
           ddl-auto: update
       show-sql: true
+
+aws:
+  sns:
+    endpoint: http://localhost:14566
+    region: ap-northeast-2
+    credentials:
+      access-key: test
+      secret-key: test
+    topic-arn: arn:aws:sns:ap-northeast-2:000000000000:reservation-topic
