@@ -1,43 +1,27 @@
 package com.study.transactional.event.reservation_transaction_poc.booking.controller;
 
-import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingOutboxService;
-import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingPropagationService;
 import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingAndEventPublishService;
+import com.study.transactional.event.reservation_transaction_poc.booking.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-
 @RestController
-@RequestMapping("/booking")
 @RequiredArgsConstructor
+@RequestMapping("/booking")
 public class BookingController {
 
-    private final BookingPropagationService bookingPropagationService;
+    private final BookingService bookingService;
     private final BookingAndEventPublishService bookingAndEventPublishService;
-    private final BookingOutboxService bookingOutboxService;
 
-    @GetMapping("/propagation/test")
-    public String bookingPropagationTest(@RequestParam String userNo, @RequestParam String productId) {
-        bookingPropagationService.createReservationWithUmsRequiresNewTakesLongTime(Long.valueOf(userNo), productId, new ArrayList<>());
-
-        return "Booking test completed successfully.";
-    }
-
+    // 예약 생성이라 POST 가 맞지만, 테스트 용도로 GET 으로 사용
     @GetMapping
-    public String bookingTransactionEventListenerTest(@RequestParam String userNo, @RequestParam String productId) {
-        bookingAndEventPublishService.createReservationAndPublishReservationEvent(Long.valueOf(userNo), productId);
+    public String createBooking(@RequestParam String userNo, @RequestParam String productId) {
+        bookingService.createBooking(Long.valueOf(userNo), productId);
 
-        return "Booking event listener test completed successfully.";
+        return "Booking created successfully.";
     }
 
-    @GetMapping("/outbox")
-    public String bookingOutboxTest(@RequestParam String userNo, @RequestParam String productId) {
-        bookingOutboxService.createBookingOutbox(Long.valueOf(userNo), productId);
-
-        return "Booking outbox test completed successfully.";
-    }
 }

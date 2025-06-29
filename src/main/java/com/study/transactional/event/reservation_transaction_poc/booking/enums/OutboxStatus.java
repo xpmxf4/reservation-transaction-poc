@@ -1,4 +1,4 @@
-package com.study.transactional.event.reservation_transaction_poc.outbox.enums;
+package com.study.transactional.event.reservation_transaction_poc.booking.enums;
 
 public enum OutboxStatus {
     PENDING,      // Initial state when the event is created

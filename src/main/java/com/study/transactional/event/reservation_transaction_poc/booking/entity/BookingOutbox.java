@@ -1,6 +1,6 @@
-package com.study.transactional.event.reservation_transaction_poc.outbox.entity;
+package com.study.transactional.event.reservation_transaction_poc.booking.entity;
 
-import com.study.transactional.event.reservation_transaction_poc.outbox.enums.OutboxStatus;
+import com.study.transactional.event.reservation_transaction_poc.booking.enums.OutboxStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,14 +12,14 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "outbox")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Outbox {
+public class BookingOutbox {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String evertType;
+    private static final String evertType="BOOKING_CREATED"; // 예약 생성 이벤트
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String payload;
@@ -35,8 +35,7 @@ public class Outbox {
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
-    public Outbox(String evertType, String payload) {
-        this.evertType = evertType;
+    public BookingOutbox(String payload) {
         this.payload = payload;
         this.status = OutboxStatus.PENDING;
     }

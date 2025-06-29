@@ -8,23 +8,22 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @SpringBootTest
-class ReservationRepositoryTest {
+class BookingRepositoryTest {
 
-    private final ReservationRepository reservationRepository;
+    private final BookingRepository bookingRepository;
 
     @Autowired
-    ReservationRepositoryTest(ReservationRepository reservationRepository) {
-        this.reservationRepository = reservationRepository;
+    BookingRepositoryTest(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
     }
 
     @AfterEach
     void tearDown() {
-        reservationRepository.deleteAll();
+        bookingRepository.deleteAll();
     }
 
     @Test
@@ -33,7 +32,7 @@ class ReservationRepositoryTest {
         Reservation reservation = new Reservation(1L, "PRODUCT-001", "010-1111-2222", BookingStatus.RESERVED);
 
         // when - 동작
-        Reservation savedReservation = reservationRepository.save(reservation);
+        Reservation savedReservation = bookingRepository.save(reservation);
 
         // then - 검증
         assertThat(savedReservation).isNotNull();
