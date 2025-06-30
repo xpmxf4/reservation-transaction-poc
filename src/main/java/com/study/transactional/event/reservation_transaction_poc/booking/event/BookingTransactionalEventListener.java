@@ -12,7 +12,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BookingEventListener {
+public class BookingTransactionalEventListener {
 
     private final BookingEventPublisher bookingEventPublisher;
 
