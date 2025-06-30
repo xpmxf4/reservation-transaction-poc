@@ -24,7 +24,7 @@ public class BookingOutboxPollingScheduler {
     private final BookingEventPublisher bookingEventPublisher;
 
     @Transactional
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 10000)
     public void pollAndProcessOutboxEvents() {
         List<BookingOutbox> pendingEvents = outboxRepository.findTop10ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
 
