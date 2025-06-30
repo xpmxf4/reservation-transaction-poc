@@ -17,9 +17,9 @@ public class BookingController {
     // 예약 생성이라 POST 가 맞지만, 테스트 용도로 GET 으로 사용
     @GetMapping
     public String createBooking(@RequestParam String userNo, @RequestParam String productId) {
-        bookingService.createBooking(Long.valueOf(userNo), productId);
+        Long createdBookingId = bookingService.createBooking(Long.valueOf(userNo), productId);
 
-        return "Booking created successfully.";
+        return String.format("Booking created: %s", createdBookingId);
     }
 
 }
