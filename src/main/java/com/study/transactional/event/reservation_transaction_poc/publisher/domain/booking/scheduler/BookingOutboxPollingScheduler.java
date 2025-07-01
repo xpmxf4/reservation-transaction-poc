@@ -3,7 +3,7 @@ package com.study.transactional.event.reservation_transaction_poc.publisher.doma
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.entity.BookingOutbox;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.enums.OutboxStatus;
-import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.BookingCreatedEvent;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.repository.BookingOutboxRepository;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns.BookingEventPublisher;
 import lombok.RequiredArgsConstructor;
@@ -35,8 +35,8 @@ public class BookingOutboxPollingScheduler {
         for (BookingOutbox outbox : pendingEvents) {
             try {
                 outbox.markAsProcessing();
-                ReservationCreatedEvent event = objectMapper.readValue(outbox.getPayload(),
-                        ReservationCreatedEvent.class
+                BookingCreatedEvent event = objectMapper.readValue(outbox.getPayload(),
+                        BookingCreatedEvent.class
                 );
 
                 // Publish the event using the publisher

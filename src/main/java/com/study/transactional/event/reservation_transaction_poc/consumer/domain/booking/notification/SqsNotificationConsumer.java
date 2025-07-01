@@ -1,7 +1,7 @@
 package com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.event.dto.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.event.dto.BookingCreatedEvent;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +19,7 @@ public class SqsNotificationConsumer {
     public void consumeReservationCreatedEvent(@Payload String payload) {
         log.info("Received SQS message from 'reservation-noti-queue' : {}", payload);
 
-        ReservationCreatedEvent reservationCreatedEvent = objectMapper.convertValue(payload, ReservationCreatedEvent.class);
-
-        // 중복 여부 체크
+        BookingCreatedEvent bookingCreatedEvent = objectMapper.convertValue(payload, BookingCreatedEvent.class);
 
         // outbox event 테이블 상태 업데이트 : pending -> success
 

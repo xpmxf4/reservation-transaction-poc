@@ -2,7 +2,7 @@ package com.study.transactional.event.reservation_transaction_poc.publisher.doma
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.BookingCreatedEvent;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns.config.SnsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class BookingSnsPublisher implements BookingEventPublisher {
     private final ObjectMapper objectMapper;
 
     @Override
-    public void publishReservationCreatedEvent(ReservationCreatedEvent event) {
+    public void publishReservationCreatedEvent(BookingCreatedEvent event) {
         try {
             String topicArn = snsProperties.topics().reservationCreated();
 

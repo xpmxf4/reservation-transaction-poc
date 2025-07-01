@@ -1,6 +1,6 @@
 package com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.listener;
 
-import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.BookingCreatedEvent;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns.BookingEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +20,9 @@ public class BookingTransactionalEventListener {
     //     event 발행 및, tx=AFTER_COMMIT 후 처리
     @Retryable(value = {RuntimeException.class}, maxAttempts = 3, backoff = @Backoff(delay = 2000, multiplier = 1.5))
     @TransactionalEventListener
-    public void handleReservationCreatedEvent(ReservationCreatedEvent event) {
+    public void handleReservationCreatedEvent(BookingCreatedEvent event) {
 
-        log.info("[TRANSACTIONAL EVENT LISTENER] Handling ReservationCreatedEvent: reservationId={}, userPhone={}, productId={}", event.reservationId(), event.userPhone(), event.productId());
+        log.info("[TRANSACTIONAL EVENT LISTENER] Handling ReservationCreatedEvent: bookingId={}, userPhone={}, productId={}", event.bookingId(), event.userPhone(), event.productId());
 
         bookingEventPublisher.publishReservationCreatedEvent(event);
     }
