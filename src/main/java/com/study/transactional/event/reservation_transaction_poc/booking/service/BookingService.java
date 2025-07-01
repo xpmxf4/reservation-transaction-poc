@@ -3,7 +3,8 @@ package com.study.transactional.event.reservation_transaction_poc.booking.servic
 import com.study.transactional.event.reservation_transaction_poc.booking.entity.Reservation;
 import com.study.transactional.event.reservation_transaction_poc.booking.enums.BookingStatus;
 import com.study.transactional.event.reservation_transaction_poc.booking.repository.BookingRepository;
-import com.study.transactional.event.reservation_transaction_poc.booking.event.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.service.BookingOutboxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;

@@ -1,9 +1,9 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.service.ums;
+package com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.transactional.event.reservation_transaction_poc.booking.config.SnsProperties;
-import com.study.transactional.event.reservation_transaction_poc.booking.event.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns.config.SnsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import software.amazon.awssdk.services.sns.model.PublishRequest;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BookingEventSnsPublisher implements BookingEventPublisher {
+public class BookingSnsPublisher implements BookingEventPublisher {
 
     private final SnsClient snsClient;
     private final SnsProperties snsProperties;

@@ -3,7 +3,6 @@ package com.study.transactional.event.reservation_transaction_poc.booking.entity
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import com.study.transactional.event.reservation_transaction_poc.booking.enums.BookingStatus;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

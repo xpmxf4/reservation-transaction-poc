@@ -1,4 +1,4 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.event;
+package com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.notification;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.awspring.cloud.sqs.annotation.SqsListener;

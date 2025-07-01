@@ -1,6 +1,6 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.entity;
+package com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.entity;
 
-import com.study.transactional.event.reservation_transaction_poc.booking.enums.OutboxStatus;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.enums.OutboxStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

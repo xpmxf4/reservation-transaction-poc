@@ -1,4 +1,4 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.config;
+package com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns.config;
 
 import com.zaxxer.hikari.util.Credentials;
 import lombok.AllArgsConstructor;

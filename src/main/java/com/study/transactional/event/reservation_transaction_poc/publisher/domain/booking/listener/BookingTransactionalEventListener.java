@@ -1,6 +1,7 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.event;
+package com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.listener;
 
-import com.study.transactional.event.reservation_transaction_poc.booking.service.ums.BookingEventPublisher;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns.BookingEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;

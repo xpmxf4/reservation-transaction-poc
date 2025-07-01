@@ -1,11 +1,11 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.scheduler;
+package com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.scheduler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.study.transactional.event.reservation_transaction_poc.booking.entity.BookingOutbox;
-import com.study.transactional.event.reservation_transaction_poc.booking.enums.OutboxStatus;
-import com.study.transactional.event.reservation_transaction_poc.booking.event.ReservationCreatedEvent;
-import com.study.transactional.event.reservation_transaction_poc.booking.repository.BookingOutboxRepository;
-import com.study.transactional.event.reservation_transaction_poc.booking.service.ums.BookingEventPublisher;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.entity.BookingOutbox;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.enums.OutboxStatus;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.ReservationCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.repository.BookingOutboxRepository;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns.BookingEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

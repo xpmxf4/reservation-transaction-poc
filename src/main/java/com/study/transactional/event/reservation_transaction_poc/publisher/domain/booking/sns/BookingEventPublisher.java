@@ -1,6 +1,7 @@
-package com.study.transactional.event.reservation_transaction_poc.booking.service.ums;
+package com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns;
 
-import com.study.transactional.event.reservation_transaction_poc.booking.event.ReservationCreatedEvent;
+
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.outbox.event.dto.ReservationCreatedEvent;
 
 public interface BookingEventPublisher {
 
