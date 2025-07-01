@@ -1,4 +1,4 @@
-package com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.notification;
+package com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.statistic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.event.dto.ReservationCreatedEvent;
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SqsNotificationConsumer {
+public class SqsStatisticConsumer {
 
     private final ObjectMapper objectMapper;
 
-    @SqsListener("reservation-noti-queue")
+    @SqsListener("reservation-stat-queue")
     public void consumeReservationCreatedEvent(@Payload String payload) {
-        log.info("Received SQS message from 'reservation-noti-queue' : {}", payload);
+        log.info("Received SQS message from 'reservation-stat-queue' : {}", payload);
 
         ReservationCreatedEvent reservationCreatedEvent = objectMapper.convertValue(payload, ReservationCreatedEvent.class);
 
