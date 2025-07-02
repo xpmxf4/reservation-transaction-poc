@@ -13,7 +13,7 @@
 | **LocalStack** | `localstack/localstack:latest`| `14566` | `4566` | `test` / `test` | SNS, SQS 서비스 활성화 |
 ## 📁 4. 프로젝트 구조
 ```
-/reservation-transaction-poc
+/booking-transaction-poc
 ├── docker-compose.yml # 모든 서비스(DB, LocalStack) 정의
 ├── init-aws.sh # AWS 리소스(SNS, SQS) 자동 생성 스크립트
 └── ... (나머지 Spring Boot 프로젝트 파일)
@@ -73,7 +73,7 @@ aws configure set region ap-northeast-2
 aws configure set output json
 
 ENDPOINT_URL=http://localhost:14566
-SNS_TOPIC_NAME="reservation-created-topic"
+SNS_TOPIC_NAME="booking-created-topic"
 
 # SNS 토픽 생성
 echo -e "\n[1/3] SNS 토픽 ($SNS_TOPIC_NAME) 생성을 시도합니다..."
@@ -81,8 +81,8 @@ SNS_TOPIC_ARN=$(aws --endpoint-url=$ENDPOINT_URL sns create-topic --name $SNS_TO
 echo "-> SNS 토픽 생성 완료: $SNS_TOPIC_ARN"
 
 # SQS 큐 생성
-SQS_QUEUE_NAME_NOTI="reservation-noti-queue"
-SQS_QUEUE_NAME_STAT="reservation-stat-queue"
+SQS_QUEUE_NAME_NOTI="booking-noti-queue"
+SQS_QUEUE_NAME_STAT="booking-stat-queue"
 
 echo -e "\n[2/3] SQS 큐 ($SQS_QUEUE_NAME_NOTI, $SQS_QUEUE_NAME_STAT) 생성을 시도합니다..."
 

@@ -1,6 +1,6 @@
 package com.study.transactional.event.reservation_transaction_poc;
 
-import com.study.transactional.event.reservation_transaction_poc.publisher.domain.booking.sns.config.SnsProperties;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.sns.config.SnsProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
