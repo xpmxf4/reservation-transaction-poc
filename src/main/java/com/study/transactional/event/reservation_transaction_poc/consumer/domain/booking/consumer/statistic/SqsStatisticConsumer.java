@@ -19,7 +19,6 @@ public class SqsStatisticConsumer {
     public void consumeReservationCreatedEvent(@Payload String payload) {
         log.info("Received SQS message from 'reservation-stat-queue' : {}", payload);
 
-        BookingCreatedEvent reservationCreatedEvent = objectMapper.convertValue(payload, BookingCreatedEvent.class);
 
         // 중복 여부 체크
 

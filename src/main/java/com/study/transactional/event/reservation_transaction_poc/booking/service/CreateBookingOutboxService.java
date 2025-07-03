@@ -1,7 +1,10 @@
 package com.study.transactional.event.reservation_transaction_poc.booking.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.transactional.event.reservation_transaction_poc.booking.dto.CreateBookingCreatedOutbox;
+import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.entity.BookingOutbox;
+import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.repository.CreateBookingOutboxRepository;
 import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.repository.ReadBookingOutboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +17,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class CreateBookingOutboxService {
 
     private final ObjectMapper objectMapper;
-    private final ReadBookingOutboxRepository outboxRepository;
+    private final CreateBookingOutboxRepository createBookingOutboxRepository;
 
     @Transactional
     public Long createBookingOutbox(CreateBookingCreatedOutbox createBookingCreatedOutbox) {
+        try {
+            String payload = objectMapper.writeValueAsString(createBookingCreatedOutbox);
 
-        return null;
+            BookingOutbox bookingOutbox = new BookingOutbox(payload);
+
+            BookingOutbox savedOutbox = createBookingOutboxRepository.save(bookingOutbox);
+
+            return savedOutbox.getId();
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

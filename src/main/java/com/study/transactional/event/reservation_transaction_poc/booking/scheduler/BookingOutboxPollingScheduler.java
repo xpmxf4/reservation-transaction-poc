@@ -1,6 +1,7 @@
 package com.study.transactional.event.reservation_transaction_poc.booking.scheduler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.study.transactional.event.reservation_transaction_poc.booking.dto.BookingEventPayload;
 import com.study.transactional.event.reservation_transaction_poc.booking.enums.OutboxStatus;
 import com.study.transactional.event.reservation_transaction_poc.booking.event.BookingCreatedEvent;
 import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.entity.BookingOutbox;
@@ -35,14 +36,19 @@ public class BookingOutboxPollingScheduler {
         for (BookingOutbox outbox : pendingEvents) {
             try {
                 outbox.markAsProcessing();
-                BookingCreatedEvent event = objectMapper.readValue(outbox.getPayload(),
-                        BookingCreatedEvent.class
+                BookingEventPayload payload = objectMapper.readValue(outbox.getPayload(),
+                        BookingEventPayload.class
                 );
 
-                // Publish the event using the publisher
+                BookingCreatedEvent event = new BookingCreatedEvent(
+                    outbox.getId(),
+                    payload.bookingId(),
+                    payload.userPhone(),
+                    payload.productId()
+                );
+
                 bookingEventPublisher.publishReservationCreatedEvent(event);
 
-                // Update the outbox status to PROCESSING
                 outbox.markAsSuccess();
 
                 log.info("Processed outbox event: {}", outbox.getId());

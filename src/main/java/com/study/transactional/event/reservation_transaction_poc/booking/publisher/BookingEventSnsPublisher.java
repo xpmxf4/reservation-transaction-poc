@@ -3,37 +3,34 @@ package com.study.transactional.event.reservation_transaction_poc.booking.publis
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.transactional.event.reservation_transaction_poc.booking.event.BookingCreatedEvent;
+import com.study.transactional.event.reservation_transaction_poc.booking.service.ReadBookingOutboxService;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.sns.SnsEventPublisher;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.sns.config.SnsProperties;
+import com.study.transactional.event.reservation_transaction_poc.publisher.domain.sns.dto.SnsEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.sns.SnsClient;
-import software.amazon.awssdk.services.sns.model.PublishRequest;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BookingSnsPublisher implements BookingEventPublisher {
+public class BookingEventSnsPublisher implements BookingEventPublisher {
 
-    private final SnsClient snsClient;
-    private final SnsProperties snsProperties;
+    private final SnsEventPublisher snsEventPublisher;
     private final ObjectMapper objectMapper;
 
     @Override
     public void publishReservationCreatedEvent(BookingCreatedEvent event) {
         try {
-            String topicArn = snsProperties.topics().reservationCreated();
-
+            Long eventId = event.eventId();
             String payload = objectMapper.writeValueAsString(event);
+            String type = "reservation-created";
 
-            PublishRequest publishRequest = PublishRequest.builder()
-                .topicArn(topicArn)
-                .message(payload)
-                .build();
+            SnsEvent snsEvent = new SnsEvent(
+                eventId, payload, type
+            );
 
-            snsClient.publish(publishRequest);
-
-            log.info("Successfully published event to SNS topic {}: {}", topicArn, event);
+            snsEventPublisher.publishEvent(snsEvent);
         } catch (JsonProcessingException e) {
             log.error("Failed to serialize event to JSON: {}", e.getMessage());
             throw new RuntimeException(e);
