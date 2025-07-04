@@ -24,7 +24,7 @@ public class CreateBookingOutboxService {
         try {
             String payload = objectMapper.writeValueAsString(createBookingCreatedOutbox);
 
-            BookingOutbox bookingOutbox = new BookingOutbox(payload);
+            BookingOutbox bookingOutbox = new BookingOutbox(createBookingCreatedOutbox.traceId(), payload);
 
             BookingOutbox savedOutbox = createBookingOutboxRepository.save(bookingOutbox);
 

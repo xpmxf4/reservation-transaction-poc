@@ -28,6 +28,9 @@ public class BookingOutbox {
     @Column(nullable = false)
     private static final String evertType="BOOKING_CREATED"; // 예약 생성 이벤트
 
+    @Column(nullable = false)
+    private String traceId;
+
     @Column(columnDefinition = "TEXT", nullable = false)
     private String payload;
 
@@ -42,7 +45,8 @@ public class BookingOutbox {
 
     private final LocalDateTime createdAt = LocalDateTime.now();
 
-    public BookingOutbox(String payload) {
+    public BookingOutbox(String traceId,String payload) {
+        this.traceId = traceId;
         this.payload = payload;
         this.status = OutboxStatus.PENDING;
     }

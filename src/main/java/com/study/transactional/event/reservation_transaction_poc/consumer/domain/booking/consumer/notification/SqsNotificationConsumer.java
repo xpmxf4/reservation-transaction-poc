@@ -1,14 +1,13 @@
 package com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.consumer.notification;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.event.dto.BookingCreatedEvent;
 import com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.event.dto.SnsNotification;
 import com.study.transactional.event.reservation_transaction_poc.consumer.domain.booking.service.UpdateBookingOutboxService;
-import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.repository.UpdateBookingOutboxRepository;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
@@ -26,15 +25,19 @@ public class SqsNotificationConsumer {
 
         BookingCreatedEvent bookingCreatedEvent = null;
         try {
-            // 1. payload -> bookingCreatedEvent 객체로 변환
+            // payload -> bookingCreatedEvent 객체로 변환
             SnsNotification snsNotification = objectMapper.readValue(payload, SnsNotification.class);
             bookingCreatedEvent = objectMapper.readValue(snsNotification.message(), BookingCreatedEvent.class);
 
-            // 2. 이벤트 처리 로직 (예: 알림 발송)
-            log.info("consuming...");
+            // traceId 설정
+            MDC.put("traceId", bookingCreatedEvent.traceId());
+            log.info("Received SNS message from 'reservation-noti-queue'");
+
+            // 이벤트 처리 로직 (예: 알림 발송)
+            log.info("consuming... bookingId={}", bookingCreatedEvent.bookingId());
             Thread.sleep(5000);
 
-            // 3. Outbox 테이블 상태를 'SUCCESS' 로 업데이트
+            // Outbox 테이블 상태를 'SUCCESS' 로 업데이트
             updateBookingOutboxService.markOutboxSuccess(bookingCreatedEvent.eventId());
 
         } catch (IllegalArgumentException e) {
@@ -48,6 +51,8 @@ public class SqsNotificationConsumer {
             if (bookingCreatedEvent != null) {
                 updateBookingOutboxService.markOutboxFailed(bookingCreatedEvent.eventId());
             }
+        } finally {
+            MDC.remove("traceId");
         }
     }
 }

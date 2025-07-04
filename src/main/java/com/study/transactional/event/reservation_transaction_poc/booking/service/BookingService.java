@@ -6,6 +6,7 @@ import com.study.transactional.event.reservation_transaction_poc.booking.enums.B
 import com.study.transactional.event.reservation_transaction_poc.booking.event.BookingCreatedEvent;
 import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.repository.BookingRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +30,7 @@ public class BookingService {
 
         // 3. 아웃박스 테이블에 저장
         CreateBookingCreatedOutbox createBookingCreatedOutbox = new CreateBookingCreatedOutbox(
+            MDC.get("traceId"),
             createdBooking.getId(),
             userPhone,
             productId
@@ -37,6 +39,7 @@ public class BookingService {
 
         // 4. 예약 이벤트 발행
         BookingCreatedEvent bookingCreatedEvent = new BookingCreatedEvent(
+            MDC.get("traceId"),
             createdEventId,
             createdBooking.getId(),
             userPhone,

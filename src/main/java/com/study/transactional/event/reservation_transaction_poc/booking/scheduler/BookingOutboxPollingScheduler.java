@@ -41,6 +41,7 @@ public class BookingOutboxPollingScheduler {
                 );
 
                 BookingCreatedEvent event = new BookingCreatedEvent(
+                    outbox.getTraceId(),
                     outbox.getId(),
                     payload.bookingId(),
                     payload.userPhone(),
