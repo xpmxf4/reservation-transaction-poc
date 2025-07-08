@@ -23,3 +23,25 @@ spring:
           reservation-created: arn:aws:sns:ap-northeast-2:000000000000:reservation-created-topic
       sqs:
         endpoint: http://localhost:14566
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        failure-rate-threshold: 30                                 # 실패율 50% 이상일시, circuit open
+        sliding-window-type: COUNT_BASED                           # 최근 호출 횟수를 기반으로 실패율 계산
+        sliding-window-size: 10                                    # 최근 10번의 호출을 기록
+        minimum-number-of-calls: 5                                 # 최소 5번은 호출되어야 통계 계산 시작
+        automatic-transition-from-open-to-half-open-enabled: true  # 자동 복구 시도 활성화
+        wait-duration-in-open-state: 10s                           # 서킷이 열리면 10초간 대기 후 HALF-OPEN
+        permitted-number-of-calls-in-half-open-state: 3            # HALF-OPEN 상태에서 3번의 테스트
+        register-health-indicator: true                            # Spring Boot Actuator 상태 표시에 포함
+    instances:
+      aCompanyAlimtalk:
+        base-config: default
+      bCompanyAlimtalk:
+        base-config: default
+      aCompanyEmail:
+        base-config: default
+      bCompanyEmail:
+        base-config: default
