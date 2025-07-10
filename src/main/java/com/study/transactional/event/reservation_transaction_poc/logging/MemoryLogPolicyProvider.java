@@ -14,4 +14,5 @@ public class MemoryLogPolicyProvider implements LogPolicyProvider {
     public LogLevel getLogLevel(LogEventEnum event) {
         return policyMap.get(event);
     }
+
 }

@@ -18,6 +18,7 @@ services:
       # 한글 깨짐 방지를 위해 UTF-8 설정을 추가합니다.
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+
   localstack:
     image: localstack/localstack:latest
     container_name: poc-localstack
@@ -27,5 +28,17 @@ services:
       - SERVICES=sns,sqs
       - DEFAULT_REGION=ap-northeast-2
 
+  # ✅ Redis 서비스 추가
+  redis:
+    image: redis:latest
+    container_name: poc-redis
+    restart: always
+    ports:
+      # 외부 포트 16379, 내부 포트 6379
+      - "16379:6379"
+    volumes:
+      - redis-data:/data
+
 volumes:
   db-data:
+  redis-data:
