@@ -24,8 +24,12 @@ public class SnsEventPublisher {
             .message(event.message())
             .build();
 
-        snsClient.publish(publishRequest);
+        try {
+            snsClient.publish(publishRequest);
 
-        log.info("Successfully published event to SNS topic {}: {}", topicArn, event);
+            log.info("이벤트가 SNS topic {}에 성공적으로 발행되었습니다: {}", topicArn, event);
+        } catch (Exception e) {
+            log.error("<UNK> SNS topic {}<UNK> <UNK> <UNK>: {}", topicArn, event, e);
+        }
     }
 }

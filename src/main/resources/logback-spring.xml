@@ -27,6 +27,7 @@
                 "eventName": "%X{eventName:-}",
                 "failureReason": "%X{failureReason:-}",
                 "productId": "%X{productId:-}",
+                "productDetailId" : "%X{productDetailId:-}"
                 "paymentId": "%X{paymentId:-}",
                 "paymentMethod": "%X{paymentMethod:-}",
                 "searchParams": "%X{searchParams:-}",

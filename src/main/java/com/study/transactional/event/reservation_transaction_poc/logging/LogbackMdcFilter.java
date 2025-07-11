@@ -40,6 +40,9 @@ public class LogbackMdcFilter extends OncePerRequestFilter {
                 String companyId = parts[1].trim().replace("Company ", "");
                 MDC.put(USER_ID_KEY, userId);
                 MDC.put(COMPANY_ID_KEY, companyId);
+
+                request.setAttribute(USER_ID_KEY, userId);
+                request.setAttribute(COMPANY_ID_KEY, companyId);
             }
         }
 
