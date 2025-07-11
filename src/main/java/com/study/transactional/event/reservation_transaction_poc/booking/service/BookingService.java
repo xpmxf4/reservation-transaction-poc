@@ -17,7 +17,7 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final CreateBookingOutboxService createBookingOutboxService;
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Long createBooking(Long userId, String productId) {
@@ -45,7 +45,7 @@ public class BookingService {
             userPhone,
             productId
         );
-        applicationEventPublisher.publishEvent(bookingCreatedEvent);
+        eventPublisher.publishEvent(bookingCreatedEvent);
 
         // 5. 예약 ID 반환
         return createdBooking.getId();
