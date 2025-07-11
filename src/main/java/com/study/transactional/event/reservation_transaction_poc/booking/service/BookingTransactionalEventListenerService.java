@@ -22,7 +22,7 @@ public class BookingTransactionalEventListenerService {
     @TransactionalEventListener
     public void handleReservationCreatedEvent(BookingCreatedEvent event) {
 
-        log.info("[TRANSACTIONAL EVENT LISTENER] Handling ReservationCreatedEvent: bookingId={}, userPhone={}, productId={}", event.bookingId(), event.userPhone(), event.productId());
+        log.info("[TRANSACTIONAL EVENT LISTENER] Handling ReservationCreatedEvent: bookingId={}, userId={}, productId={}", event.bookingId(), event.userPhone(), event.productId());
 
         bookingEventPublisher.publishReservationCreatedEvent(event);
     }

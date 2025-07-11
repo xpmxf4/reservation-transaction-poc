@@ -16,7 +16,7 @@ public class LogbackMdcFilter extends OncePerRequestFilter {
 
     private static final String TRACE_ID_KEY = "traceId";
     private static final String COMPANY_ID_KEY = "companyId";
-    private static final String USER_ID_KEY = "userId";
+    private static final String USER_ID_KEY = "userNo";
 
     private static final String MOCK_AUTH_HEADER = "Authorization";
 
@@ -36,13 +36,13 @@ public class LogbackMdcFilter extends OncePerRequestFilter {
             // "User 1, Compnay 123" -> ["User 1", "Company 123"]
             String[] parts = authHeader.split(",");
             if(parts.length == 2) {
-                String userId = parts[0].trim().replace("User ", "");
+                String userNo = parts[0].trim().replace("User ", "");
                 String companyId = parts[1].trim().replace("Company ", "");
-                MDC.put(USER_ID_KEY, userId);
+                MDC.put(USER_ID_KEY, userNo);
                 MDC.put(COMPANY_ID_KEY, companyId);
 
-                request.setAttribute(USER_ID_KEY, userId);
-                request.setAttribute(COMPANY_ID_KEY, companyId);
+                request.setAttribute(USER_ID_KEY, Long.valueOf(userNo));
+                request.setAttribute(COMPANY_ID_KEY, Long.valueOf(companyId));
             }
         }
 

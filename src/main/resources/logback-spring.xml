@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <!-- 변수 정의 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    <conversionRule conversionWord="wex" converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter" />
+    <conversionRule conversionWord="wEx" converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter" />
+
     <property name="LOG_PATH" value="logs"/>
     <property name="LOG_FILE_NAME" value="application"/>
 
-    <!-- JSON 로그 포맷 정의: 우리가 사용할 모든 MDC 키를 미리 선언 -->
     <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/${LOG_FILE_NAME}.json</file>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
@@ -17,26 +19,19 @@
                 "thread": "%thread",
                 "logger": "%logger{36}",
                 "message": "%msg",
-
-                <!-- 공통 컨텍스트 -->
                 "traceId": "%X{traceId:-}",
                 "companyId": "%X{companyId:-}",
                 "userId": "%X{userId:-}",
-
-                <!-- 비즈니스 컨텍스트 -->
                 "eventName": "%X{eventName:-}",
                 "failureReason": "%X{failureReason:-}",
                 "productId": "%X{productId:-}",
-                "productDetailId" : "%X{productDetailId:-}"
+                "productDetailId" : "%X{productDetailId:-}",
                 "paymentId": "%X{paymentId:-}",
                 "paymentMethod": "%X{paymentMethod:-}",
                 "searchParams": "%X{searchParams:-}",
-
-                <!-- 운영 컨텍스트 -->
                 "providerName": "%X{providerName:-}",
                 "providerResponseTimeMs": "%X{providerResponseTimeMs:-}",
-
-                "exception": "%ex{full}"
+                "exception": "%wEx{full}"
                 }
             </pattern>
         </encoder>
@@ -46,23 +41,20 @@
         </rollingPolicy>
     </appender>
 
-    <!-- 개발 환경용 Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%X{traceId:-}] - %msg%n</pattern>
+            <pattern>%clr(%d{HH:mm:ss.SSS}){faint} %clr(%-5level) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} [%X{traceId:-}] : %m%n%wEx</pattern>
         </encoder>
     </appender>
 
-    <!-- 운영 환경(prod)에서는 JSON 파일로만 로깅 -->
     <springProfile name="prod">
         <root level="INFO">
             <appender-ref ref="JSON_FILE"/>
         </root>
     </springProfile>
 
-    <!-- 개발 환경(local, dev)에서는 콘솔로만 로깅 -->
-    <springProfile name="!prod">
-        <root level="DEBUG">
+    <springProfile name="dev | local">
+        <root level="INFO">
             <appender-ref ref="CONSOLE"/>
         </root>
     </springProfile>

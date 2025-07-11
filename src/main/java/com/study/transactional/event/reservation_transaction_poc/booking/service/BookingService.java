@@ -1,10 +1,8 @@
 package com.study.transactional.event.reservation_transaction_poc.booking.service;
 
 import com.study.transactional.event.reservation_transaction_poc.booking.dto.BookingResponse;
-import com.study.transactional.event.reservation_transaction_poc.booking.dto.CreateBooking;
-import com.study.transactional.event.reservation_transaction_poc.booking.enums.BookingStatus;
-import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.entity.Booking;
-import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.entity.BookingOutbox;
+import com.study.transactional.event.reservation_transaction_poc.booking.dto.ClientCreateBookingRequestDto;
+import com.study.transactional.event.reservation_transaction_poc.booking.dto.CreateBookingRequestDto;
 import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.repository.BookingRepository;
 import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.repository.SeatHoldRepository;
 import com.study.transactional.event.reservation_transaction_poc.payment.dto.PaymentResponse;
@@ -16,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -29,10 +26,11 @@ public class BookingService {
     private final CreateBookingOutboxService createBookingOutboxService;
     private final ApplicationEventPublisher eventPublisher;
     private final SeatHoldRepository seatHoldRepository;
+    private final CreateBookingService createBookingService;
 
-    public BookingResponse createBooking(CreateBooking createBooking) {
-        String productId = createBooking.productId();
-        String productDetailId = createBooking.productDetailId();
+    public BookingResponse createBooking(ClientCreateBookingRequestDto clientCreateBookingRequestDto) {
+        String productId = clientCreateBookingRequestDto.productId();
+        String productDetailId = clientCreateBookingRequestDto.productDetailId();
 
         // 공통 컨텍스트 및 이 단계의 주요 비즈니스 컨텍스트 설정
         MDC.put("productId", productId);
@@ -62,8 +60,21 @@ public class BookingService {
 
             // 3-2. 결제 성공 시, 최종 예약 처리 (DB 에 예약/아웃박스 저장, 이벤트 발행)
             String paymentId = paymentResponse.paymentId();
-            return finalizeBookingAndCreateOutbox(productId, paymentId, seatHoldId);
 
+            CreateBookingRequestDto createBookingRequestDto = new CreateBookingRequestDto(
+                    clientCreateBookingRequestDto.companyId(),
+                    clientCreateBookingRequestDto.userNo(),
+                    productId,
+                    productDetailId,
+                    paymentId
+            );
+            Long createdBookingId = createBookingService.createBooking(createBookingRequestDto);
+
+            return new BookingResponse(
+                    true,
+                    createdBookingId.toString(),
+                    "예약 성공. 결제 ID: " + paymentId + ", 예약 ID: " + createdBookingId
+            );
         } catch (Exception e) {
             log.error("결제 중 예측하지 못한 예외 발생. 좌석 선점 해제 시도.", e);
             seatService.releaseSeat(seatHoldId);
@@ -74,37 +85,4 @@ public class BookingService {
         }
     }
 
-    @Transactional
-    public BookingResponse finalizeBookingAndCreateOutbox(String productId, String paymentId, Long seatHoldId) {
-        MDC.put("paymentId", paymentId);
-        MDC.put("eventName", "BOOKING_FINALIZE");
-        try {
-            // 1. Seat 도메인 서비스 호출을 통해 좌석 상태를 '확정'으로 변경
-            seatService.confirmHold(seatHoldId);
-
-            // 2. 최종 Booking 엔티티 생성 및 저장 (사용자 정의 구조 사용)
-            Booking booking = Booking.builder()
-                .userId(Long.valueOf(MDC.get("userId")))
-                .productId(productId)
-                .userPhone("010-0000-0000") // 실제로는 user-service 등에서 조회
-                .status(BookingStatus.RESERVED)
-                .build();
-            bookingRepository.save(booking);
-
-            // 3. Outbox 이벤트 생성 및 저장 (사용자 정의 구조 사용)
-            String eventPayload = createEventPayload("BOOKING_CONFIRMED", booking);
-            BookingOutbox outboxEvent = BookingOutbox.builder()
-                .eventType("BOOKING_CONFIRMED")
-                .traceId(MDC.get("traceId"))
-                .payload(eventPayload)
-                .build();
-            outboxRepository.save(outboxEvent);
-
-            log.info("[BOOKING_CONFIRM_SUCCESS] 최종 예약 및 Outbox 저장 완료. Booking ID: {}", booking.getId());
-            return new BookingResponse(true, booking.getId().toString(), "예약 성공");
-        } finally {
-            MDC.remove("paymentId");
-            MDC.remove("eventName");
-        }
-    }
 }

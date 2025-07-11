@@ -1,8 +1,8 @@
 package com.study.transactional.event.reservation_transaction_poc.booking.dto;
 
-public record CreateBooking(
+public record ClientCreateBookingRequestDto(
     Long userNo,
-    String companyId,
+    Long companyId,
     String productId,
     String productDetailId) {
 

@@ -3,7 +3,6 @@ package com.study.transactional.event.reservation_transaction_poc.booking.publis
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.study.transactional.event.reservation_transaction_poc.booking.event.BookingCreatedEvent;
-import com.study.transactional.event.reservation_transaction_poc.booking.service.ReadBookingOutboxService;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.sns.SnsEventPublisher;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.sns.config.SnsProperties;
 import com.study.transactional.event.reservation_transaction_poc.publisher.domain.sns.dto.SnsEvent;

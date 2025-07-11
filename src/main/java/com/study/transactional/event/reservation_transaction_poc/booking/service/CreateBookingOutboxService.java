@@ -23,7 +23,11 @@ public class CreateBookingOutboxService {
         try {
             String payload = objectMapper.writeValueAsString(createBookingCreatedOutbox);
 
-            BookingOutbox bookingOutbox = new BookingOutbox(createBookingCreatedOutbox.traceId(), payload);
+            BookingOutbox bookingOutbox = new BookingOutbox(
+                    "BOOKING_CREATED",
+                    createBookingCreatedOutbox.traceId(),
+                    payload
+            );
 
             BookingOutbox savedOutbox = bookingOutboxRepository.save(bookingOutbox);
 

@@ -5,8 +5,8 @@ import com.study.transactional.event.reservation_transaction_poc.booking.dto.Boo
 import com.study.transactional.event.reservation_transaction_poc.booking.enums.OutboxStatus;
 import com.study.transactional.event.reservation_transaction_poc.booking.event.BookingCreatedEvent;
 import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.entity.BookingOutbox;
-import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.repository.ReadBookingOutboxRepository;
 import com.study.transactional.event.reservation_transaction_poc.booking.publisher.BookingEventPublisher;
+import com.study.transactional.event.reservation_transaction_poc.jpa.domain.booking.repository.BookingOutboxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,13 +21,13 @@ import java.util.List;
 public class BookingOutboxPollingScheduler {
 
     private final ObjectMapper objectMapper;
-    private final ReadBookingOutboxRepository outboxRepository;
+    private final BookingOutboxRepository outboxRepository;
     private final BookingEventPublisher bookingEventPublisher;
 
     @Transactional
     @Scheduled(fixedDelay = 10000)
     public void pollAndProcessOutboxEvents() {
-        List<BookingOutbox> pendingEvents = outboxRepository.findTop10ByStatusOrderByCreatedAtAsc(OutboxStatus.PENDING);
+        List<BookingOutbox> pendingEvents = outboxRepository.findTop10ByStatusOrderByCreatedAtAsc();
 
         if (pendingEvents.isEmpty()) {
             return;
